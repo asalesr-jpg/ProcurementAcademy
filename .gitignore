@@ -1,0 +1,21 @@
+# Local configuration (includes the initial admin password hash).
+/config.php
+/.env
+/.env.*
+!/.env.example
+
+# Runtime accounts, sessions, progress and uploaded content.
+/data/*
+!/data/.htaccess
+!/data/index.html
+
+# Local tooling and generated files.
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+/node_modules/
+/vendor/
+/.idea/
+/.vscode/

@@ -1,0 +1,10 @@
+# Optional, for Apache servers
+AddType audio/mpeg .mp3
+AddType application/vnd.openxmlformats-officedocument.spreadsheetml.sheet .xlsx
+AddType application/vnd.openxmlformats-officedocument.presentationml.presentation .pptx
+DirectoryIndex index.html
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|html|css)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>

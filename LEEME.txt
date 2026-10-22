@@ -1,0 +1,75 @@
+PROCUREMENT ACADEMY - VERSIÓN WEB PARA TU SERVIDOR (PHP, sin base de datos)
+
+QUÉ ES
+- Una plataforma de formación con varios cursos. La página principal (index.html) es el portal de la Academy:
+  catálogo de cursos, "Mis cursos" de cada alumno y la administración de personas e inscripciones.
+- Cada curso vive en su propia carpeta (stakeholder/ para Stakeholder Academy y source-to-contract/ para Source to Contract).
+- Un mismo usuario y contraseña sirve para todos los cursos en los que esté inscrito.
+
+QUÉ NECESITA
+- Un hosting web con PHP 7.4 o superior. No necesita base de datos: todo se guarda en archivos dentro de "data".
+- Funciona con Apache, LiteSpeed o Nginx. Usa https: la cámara y el micrófono del navegador SOLO funcionan con https.
+
+PUBLICAR
+1. Sube TODO el contenido de esta carpeta por FTP (incluidos los archivos ocultos .htaccess) a una carpeta de tu servidor, por ejemplo /academy/.
+2. Da permiso de escritura al servidor web sobre la carpeta "data" (en el FTP: botón derecho > Permisos > 755; si no guarda nada, prueba 775 o 777).
+3. Abre https://tu-dominio/academy/ y entra con:
+     Usuario: admin
+     Contraseña: la que me diste para el panel de administración
+   Cámbiala nada más entrar: botón "Password" arriba a la derecha.
+
+PÁGINA PÚBLICA Y REGISTRO
+- Quien entra en la web sin sesión ve la página de inicio pública: el catálogo, una vista previa de cada curso
+  (programa, ejemplos de slides y los primeros tres minutos de la primera lección de vídeo) y el botón para registrarse.
+- Cualquiera puede crear su cuenta (nombre, e-mail, contraseña y, si quiere, empresa y país), elegir sus cursos y entra
+  directamente en la plataforma. No hay confirmación por e-mail. El e-mail es su usuario para entrar.
+- Ya dentro, cada persona puede inscribirse en otro curso abierto con un clic desde su página de inicio.
+- Como admin, en "People and enrolment" puedes cerrar o abrir el registro en cualquier momento y ver quién se ha
+  registrado solo (empresa, país, fecha). En la lista de cuentas, "Pause" impide entrar a una persona sin borrar su trabajo.
+- Protección básica: un campo oculto contra robots y un máximo de 10 registros por hora desde la misma conexión.
+
+PERSONAS E INSCRIPCIONES (en el portal, como admin > "People and enrolment")
+- Crea cuentas una a una o varias a la vez (una línea por persona: "Nombre Apellido; usuario; contraseña"; lo que falte se genera solo).
+- Marca encima en qué cursos se inscriben las cuentas nuevas. En la tabla puedes inscribir o dar de baja a cada persona en cada curso.
+- Puedes copiar los accesos o descargarlos en CSV. Las contraseñas se guardan cifradas: si alguien la pierde, genera una nueva.
+- "Edit the catalogue" cambia textos de la portada y de las fichas de los cursos (abrir/cerrar un curso).
+
+DENTRO DE CADA CURSO (como admin)
+- "Admin panel" > "Presentations": editor visual de TODAS las presentaciones del curso.
+  Elige la presentación arriba (slides del profesor para la clase en vivo o slides del curso que usan las lecciones de vídeo).
+  Haz clic en cualquier texto de la diapositiva para cambiarlo; a la derecha cambias el diseño, las notas del profesor y las listas;
+  "+ New slide" abre la galería de diseños; arrastra las miniaturas para reordenar. "Save and publish" lo publica.
+- "Admin panel" > "Sessions", "Video lessons", "Templates", "Home and capstone": el resto del contenido.
+- "Course admin": progreso y entregas de los alumnos, calendario y la clase en vivo.
+
+CLASE EN VIVO
+- El profesor presenta sus propias slides de clase (menos diapositivas, pensadas para explicar y abrir debate, con notas solo visibles para él).
+  Los alumnos solo ven la diapositiva que el profesor está mostrando; nunca reciben las notas ni pueden abrir esas presentaciones.
+  El profesor puede cambiar en cualquier momento a las slides del curso.
+- Encuestas, preguntas de los alumnos, manos levantadas y lista de participantes.
+- Vídeo y audio integrados: cada persona pulsa "Join with camera and microphone". El profesor puede silenciar a una persona o a todos,
+  y expulsar a alguien de la llamada (y volver a dejarle entrar) desde la pestaña "Participants".
+- Límites a tener en cuenta: la llamada es directa entre navegadores (sin coste ni servicio externo) y va bien hasta unas 10-12 personas con cámara.
+  En redes corporativas muy cerradas puede hacer falta un servidor TURN: se configura en config.php (ICE_SERVERS, hay un ejemplo comentado).
+  Para grupos más grandes, usad Teams o Zoom y dejad la web para slides, encuestas y preguntas.
+
+QUÉ SE GUARDA EN EL SERVIDOR
+- Por cada alumno y curso: ejercicios, quizzes, fieldwork, avance y respuestas de las lecciones de vídeo. Lo ve desde cualquier ordenador.
+- Los cambios de contenido y de presentaciones llegan a todos al guardar.
+
+COPIA DE SEGURIDAD Y ACTUALIZACIONES
+- Todo está en la carpeta "data". Descárgala por FTP de vez en cuando. Para restaurar, súbela de nuevo.
+- Para actualizar la web (por ejemplo al añadir un curso nuevo), sube los archivos nuevos SIN borrar ni sobrescribir la carpeta "data".
+
+SEGURIDAD
+- Las carpetas "data" y "seed" están bloqueadas para los visitantes (.htaccess) y cada archivo guardado es un .php que no muestra nada si alguien lo abre.
+- Solo la cuenta admin puede cambiar contenido, crear cuentas, ver las slides del profesor o el trabajo de otros. Cada alumno solo guarda lo suyo.
+- Cinco contraseñas erróneas bloquean ese usuario durante cinco minutos.
+- En Nginx, añade a la configuración del sitio:  location ~ ^/academy/(data|seed)/ { deny all; }
+
+CONTENIDO
+- index.html: portal.  app/: código común de la plataforma.  api.php: el servidor.  config.php: contraseña inicial del admin (cifrada), sesión y TURN.
+- stakeholder/ y source-to-contract/: un curso cada una (audio/: 24 lecciones narradas; templates/: Excel y PowerPoint; downloads/: decks y libro).
+- seed/: slides originales del profesor (protegidas).  data/: cuentas, progreso y cambios (se rellena sola).
+
+NO FUNCIONA abriendo index.html con doble clic desde tu disco: necesita el servidor web con PHP.
